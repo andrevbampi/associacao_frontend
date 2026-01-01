@@ -40,6 +40,10 @@ export class UsuariosComponent {
 
       //Mensagem
       alert('Usuário cadastrado com sucesso.');
+    }, errorResponse => {
+      if (errorResponse.status === 500) {
+        alert(errorResponse.error)
+      }
     });
   }
 
@@ -57,6 +61,10 @@ export class UsuariosComponent {
 
       //Mensagem
       alert('Usuário editado com sucesso.');
+    }, errorResponse => {
+      if (errorResponse.status === 500) {
+        alert(errorResponse.error)
+      }
     });
   }
 
@@ -80,6 +88,10 @@ export class UsuariosComponent {
 
       //Mensagem
       alert('Usuário removido com sucesso.');
+    }, errorResponse => {
+      if (errorResponse.status === 500) {
+        alert(errorResponse.error)
+      }
     });
   }
 
