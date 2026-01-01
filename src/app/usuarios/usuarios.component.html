@@ -1,0 +1,74 @@
+<a routerLink="../">Página inicial</a> <br>
+
+<form>
+    <input
+        type="text"
+        placeholder="Login"
+        class="form-control"
+        name="login"
+        [(ngModel)]="usuario.login">
+    
+    <input
+        type="text"
+        placeholder="Senha"
+        class="form-control"
+        name="senha"
+        [(ngModel)]="usuario.senha">
+
+    <input
+        type="text"
+        placeholder="Nome"
+        class="form-control"
+        name="nome"
+        [(ngModel)]="usuario.nome">
+    
+    <input
+        type="button"
+        value="Cadastrar"
+        *ngIf="btnCadastro"
+        class="btn btn-primary"
+        (click)="cadastrar()">
+
+    <input
+        type="button"
+        value="Alterar"
+        *ngIf="!btnCadastro"
+        class="btn btn-warning"
+        (click)="editar()">
+
+    <input
+        type="button"
+        value="Remover"
+        *ngIf="!btnCadastro"
+        class="btn btn-danger"
+        (click)="remover()">
+
+    <input
+        type="button"
+        value="Cancelar"
+        *ngIf="!btnCadastro"
+        class="btn btn-secondary"
+        (click)="cancelar()">
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Login</th>
+            <th>Senha</th>
+            <th>Nome</th>
+            <th>Selecionar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let u of usuarios; index as i">
+            <td>{{i+1}}</td>
+            <td>{{u.login}}</td>
+            <td>{{u.senha}}</td>
+            <td>{{u.nome}}</td>
+            <td>
+                <button clas="btn btn-success" (click)="selecionarUsuario(i)">Selecionar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
