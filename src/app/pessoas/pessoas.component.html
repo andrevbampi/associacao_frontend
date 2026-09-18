@@ -1,0 +1,132 @@
+<a routerLink="../">Página inicial</a> <br>
+
+<form>
+    <div class="radio-group">
+        <div class="radio-option">
+            <input
+                type="radio"
+                id="tipoFisica"
+                name="tipo"
+                [value]="1"
+                [(ngModel)]="pessoa.tipo">
+
+            <label for="tipoFisica">
+                Física
+            </label>
+        </div>
+
+        <div class="radio-option">
+            <input
+                type="radio"
+                id="tipoJuridica"
+                name="tipo"
+                [value]="2"
+                [(ngModel)]="pessoa.tipo">
+
+            <label for="tipoJuridica">
+                Jurídica
+            </label>
+        </div>
+    </div>
+    
+    <input
+        type="text"
+        placeholder="Nome"
+        class="form-control"
+        name="nome"
+        [(ngModel)]="pessoa.nome">
+
+    <input
+        type="text"
+        placeholder="CPF/CNPJ"
+        class="form-control"
+        name="documento"
+        [(ngModel)]="pessoa.documento">
+
+    <input
+        type="date"
+        placeholder="Data de nascimento"
+        class="form-control"
+        name="dataNascimento"
+        [(ngModel)]="pessoa.dataNascimento">
+
+    <input
+        type="text"
+        placeholder="Telefone"
+        class="form-control"
+        name="telefone"
+        [(ngModel)]="pessoa.telefone">
+
+    <input
+        type="text"
+        placeholder="E-mail"
+        class="form-control"
+        name="email"
+        [(ngModel)]="pessoa.email">
+
+    <input
+        type="text"
+        placeholder="Endereço"
+        class="form-control"
+        name="endereco"
+        [(ngModel)]="pessoa.endereco">
+    
+    <input
+        type="button"
+        value="Cadastrar"
+        *ngIf="btnCadastro"
+        class="btn btn-primary"
+        (click)="cadastrar()">
+
+    <input
+        type="button"
+        value="Alterar"
+        *ngIf="!btnCadastro"
+        class="btn btn-warning"
+        (click)="editar()">
+
+    <input
+        type="button"
+        value="Remover"
+        *ngIf="!btnCadastro"
+        class="btn btn-danger"
+        (click)="remover()">
+
+    <input
+        type="button"
+        value="Cancelar"
+        *ngIf="!btnCadastro"
+        class="btn btn-secondary"
+        (click)="cancelar()">
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Tipo</th>
+            <th>Nome</th>
+            <th>CPF/CNPJ</th>
+            <th>Data de nascimento</th>
+            <th>Idade</th>
+            <th>Telefone</th>
+            <th>E-mail</th>
+            <th>Endereço</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of pessoas; index as i">
+            <td>{{i+1}}</td>
+            <td>{{descricaoTipo(p.tipo)}}</td>
+            <td>{{p.nome}}</td>
+            <td>{{p.documento}}</td>
+            <td>{{p.dataNascimento | date:'dd/MM/yyyy'}}</td>
+            <td>{{calcularIdade(p.dataNascimento)}}</td>
+            <td>{{p.telefone}}</td>
+            <td>{{p.email}}</td>
+            <td>{{p.endereco}}</td>
+            <td>
+                <button clas="btn btn-success" (click)="selecionarPessoa(i)">Selecionar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

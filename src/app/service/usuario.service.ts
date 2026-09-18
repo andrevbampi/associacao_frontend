@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Usuario } from '../model/Usuario';
+import { UsuarioRequest } from '../model/UsuarioRequest';
+import { UsuarioResponse } from '../model/UsuarioResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,18 +15,18 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   //Selecionar todos os usuários
-  public selecionar(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url + '/');
+  public selecionar(): Observable<UsuarioResponse[]> {
+    return this.http.get<UsuarioResponse[]>(this.url + '/');
   }
 
   //Cadastrar usuário
-  public cadastrar(obj: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(this.url + '/', obj);
+  public cadastrar(obj: UsuarioRequest): Observable<UsuarioResponse> {
+    return this.http.post<UsuarioResponse>(this.url + '/', obj);
   }
 
   //Editar usuário
-  public editar(obj: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(this.url + '/', obj);
+  public editar(obj: UsuarioRequest): Observable<UsuarioResponse> {
+    return this.http.put<UsuarioResponse>(this.url + '/', obj);
   }
 
   //Remover usuário

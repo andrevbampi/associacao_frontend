@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Usuario } from '../model/Usuario';
+import { UsuarioRequest } from '../model/UsuarioRequest';
+import { UsuarioResponse } from '../model/UsuarioResponse';
 import { UsuarioService } from '../service/usuario.service';
 
 @Component({
@@ -9,121 +10,170 @@ import { UsuarioService } from '../service/usuario.service';
 })
 export class UsuariosComponent {
 
-  //Objeto do tipo Usuario
-  usuario = new Usuario();
+  // Objeto utilizado pelo formulário
+  usuario = new UsuarioRequest();
 
-  //Variável para a visibilidade dos botões
+  // Variável para a visibilidade dos botões
   btnCadastro: boolean = true;
 
-  //Variável para a visibilidade da tabela
+  // Variável para a visibilidade da tabela
   tabela: boolean = true;
 
-  //JSON de usuários
-  usuarios: Usuario[] = [];
+  // Usuários retornados pela API
+  usuarios: UsuarioResponse[] = [];
 
-  //Construtor
+  // Construtor
   constructor(private service: UsuarioService) {}
 
-  //Método de seleção
+  // Método de seleção
   selecionar(): void {
-    this.service.selecionar().subscribe(retorno => this.usuarios = retorno);
+    this.service.selecionar().subscribe(retorno => {
+      this.usuarios = retorno;
+    });
   }
 
-  //Método de cadastro
+  // Método de cadastro
   cadastrar(): void {
     this.service.cadastrar(this.usuario).subscribe(retorno => {
-      //Cadastrar o usuário no vetor
+
+      // Cadastrar o usuário no vetor
       this.usuarios.push(retorno);
 
-      //Limpar o formulário
-      this.usuario = new Usuario();
+      // Limpar o formulário
+      this.usuario = new UsuarioRequest();
 
-      //Mensagem
+      // Mensagem
       alert('Usuário cadastrado com sucesso.');
+
     }, errorResponse => {
+
       if (errorResponse.status === 500) {
-        alert(errorResponse.error)
+        alert(errorResponse.error);
       }
+
     });
   }
 
-  //Método de edição
+  // Método de edição
   editar(): void {
     this.service.editar(this.usuario).subscribe(retorno => {
-      //Limpar o formulário
-      this.usuario = new Usuario();
 
-      //Visibilidade dos botões
+      // Atualizar o usuário no vetor
+      const posicao = this.usuarios.findIndex(
+        obj => obj.id === retorno.id
+      );
+
+      if (posicao !== -1) {
+        this.usuarios[posicao] = retorno;
+      }
+
+      // Limpar o formulário
+      this.usuario = new UsuarioRequest();
+
+      // Visibilidade dos botões
       this.btnCadastro = true;
 
-      //Visibilidade da tabela
+      // Visibilidade da tabela
       this.tabela = true;
 
-      //Mensagem
+      // Mensagem
       alert('Usuário editado com sucesso.');
+
     }, errorResponse => {
+
       if (errorResponse.status === 500) {
-        alert(errorResponse.error)
+        alert(errorResponse.error);
       }
+
     });
   }
 
-  //Método para remover usuário
+  // Método para remover usuário
   remover(): void {
     this.service.remover(this.usuario.id).subscribe(retorno => {
-      //Obter posição do vetor onde está o usuário
-      let posicao = this.usuarios.findIndex(obj => {return obj.id == this.usuario.id});
 
-      //Remover usuário do vetor
+      // Obter posição do vetor onde está o usuário
+      let posicao = this.usuarios.findIndex(
+        obj => obj.id === this.usuario.id
+      );
+
+      // Remover usuário do vetor
       this.usuarios.splice(posicao, 1);
 
-      //Limpar o formulário
-      this.usuario = new Usuario();
+      // Limpar o formulário
+      this.usuario = new UsuarioRequest();
 
-      //Visibilidade dos botões
+      // Visibilidade dos botões
       this.btnCadastro = true;
 
-      //Visibilidade da tabela
+      // Visibilidade da tabela
       this.tabela = true;
 
-      //Mensagem
+      // Mensagem
       alert('Usuário removido com sucesso.');
+
     }, errorResponse => {
+
       if (errorResponse.status === 500) {
-        alert(errorResponse.error)
+        alert(errorResponse.error);
       }
+
     });
   }
 
-  //Método para selecionar um usuário específico
+  // Método para selecionar um usuário específico
   selecionarUsuario(posicao: number): void {
-    //Selecionar usuário no vetor
-    this.usuario = this.usuarios[posicao];
 
-    //Visibilidade dos botões
+    const usuarioResponse = this.usuarios[posicao];
+
+    // Copiar dados do Response para o Request
+    this.usuario.id = usuarioResponse.id;
+    this.usuario.login = usuarioResponse.login;
+    this.usuario.senha = "";
+
+    if (usuarioResponse.pessoa !== null) {
+      this.usuario.idPessoa = usuarioResponse.pessoa.id;
+    }
+
+    // Visibilidade dos botões
     this.btnCadastro = false;
 
-    //Visibilidade da tabela
+    // Visibilidade da tabela
     this.tabela = false;
   }
 
-  //Método para cancelar
+  // Método para cancelar
   cancelar(): void {
-    //Limpar o formulário
-    this.usuario = new Usuario();
+    // Limpar o formulário
+    this.usuario = new UsuarioRequest();
 
-    //Visibilidade dos botões
+    // Visibilidade dos botões
     this.btnCadastro = true;
 
-    //Visibilidade da tabela
+    // Visibilidade da tabela
     this.tabela = true;
 
-    //Carregar novamente
+    // Carregar novamente
     this.selecionar();
   }
 
-  //Método de inicialização
+  // Método de inicialização
   ngOnInit() {
     this.selecionar();
   }
+
+  calcularIdade(dataNascimento: string): number {
+    const nascimento = new Date(dataNascimento);
+    const hoje = new Date();
+
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth() - nascimento.getMonth();
+
+    if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+      idade--;
+    }
+
+    return idade;
+  }
+
 }

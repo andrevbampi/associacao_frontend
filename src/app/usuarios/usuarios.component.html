@@ -9,7 +9,7 @@
         [(ngModel)]="usuario.login">
     
     <input
-        type="text"
+        type="password"
         placeholder="Senha"
         class="form-control"
         name="senha"
@@ -17,10 +17,10 @@
 
     <input
         type="text"
-        placeholder="Nome"
+        placeholder="ID da pessoa"
         class="form-control"
-        name="nome"
-        [(ngModel)]="usuario.nome">
+        name="idPessoa"
+        [(ngModel)]="usuario.idPessoa">
     
     <input
         type="button"
@@ -50,24 +50,32 @@
         class="btn btn-secondary"
         (click)="cancelar()">
 </form>
+
 <table>
     <thead>
         <tr>
             <th>#</th>
             <th>Login</th>
-            <th>Senha</th>
+            <th>ID da pessoa</th>
             <th>Nome</th>
+            <th>Idade</th>
             <th>Selecionar</th>
         </tr>
     </thead>
+
     <tbody>
         <tr *ngFor="let u of usuarios; index as i">
             <td>{{i+1}}</td>
             <td>{{u.login}}</td>
-            <td>{{u.senha}}</td>
-            <td>{{u.nome}}</td>
+            <td>{{u.pessoa === null ? "" : u.pessoa.id}}</td>
+            <td>{{u.pessoa === null ? "" : u.pessoa.nome}}</td>
+            <td>{{u.pessoa === null ? "" : calcularIdade(u.pessoa.dataNascimento)}}</td>
             <td>
-                <button clas="btn btn-success" (click)="selecionarUsuario(i)">Selecionar</button>
+                <button
+                    class="btn btn-success"
+                    (click)="selecionarUsuario(i)">
+                    Selecionar
+                </button>
             </td>
         </tr>
     </tbody>
